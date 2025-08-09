@@ -107,7 +107,7 @@ public class Player : SingletonMonobehaviour<Player>
         xInput = Input.GetAxisRaw("Horizontal");
         yInput = Input.GetAxisRaw("Vertical");
 
-        if(xInput !=0 && yInput != 0)
+        if (xInput != 0 && yInput != 0)
         {
             xInput = xInput * 0.71f;
             yInput = yInput * 0.71f;
@@ -121,7 +121,7 @@ public class Player : SingletonMonobehaviour<Player>
             movementSpeed = Settings.runningSpeed;
 
             //获取玩家朝向，用于保存游戏功能
-            if(xInput < 0)
+            if (xInput < 0)
             {
                 playerDirection = Direction.left;
             }
@@ -129,7 +129,7 @@ public class Player : SingletonMonobehaviour<Player>
             {
                 playerDirection = Direction.right;
             }
-            else  if(yInput < 0)
+            else if (yInput < 0)
             {
                 playerDirection = Direction.down;
             }
@@ -139,7 +139,7 @@ public class Player : SingletonMonobehaviour<Player>
             }
         }
 
-        if(xInput ==0 && yInput == 0)
+        if (xInput == 0 && yInput == 0)
         {
             isRunnning = false;
             isWalking = false;

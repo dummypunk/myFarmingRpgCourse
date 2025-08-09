@@ -140,6 +140,46 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
             return null;
     }
 
+
+    /// <summary>
+    /// 从inventory中移除item，并在地图中相应位置创建item
+    /// </summary>
+    /// <param name="inventoryLocation"></param>
+    /// <param name="itemCode"></param>
+    public void RemoveItem(InventoryLocation inventoryLocation, int itemCode)
+    {
+        List<InventoryItem> inventoryList = inventoryLists[(int)inventoryLocation];
+
+        //检查inventory是否包含该物品
+        int itemPosition = FindItemInInventory(inventoryLocation, itemCode);
+
+        if(itemPosition != -1)
+        {
+            RemoveItemAtPosition(inventoryList, itemCode, itemPosition);
+        }
+
+        //发送inventory更新事件
+        EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryList);
+    }
+
+    private void RemoveItemAtPosition(List<InventoryItem> inventoryList, int itemCode, int position)
+    {
+        InventoryItem inventoryItem = new InventoryItem();
+
+        int quantity = inventoryList[position].itemQuantity - 1;
+
+        if(quantity > 0)
+        {
+            inventoryItem.itemQuantity = quantity;
+            inventoryItem.itemCode = itemCode;
+            inventoryList[position] = inventoryItem;
+        }
+        else
+        {
+            inventoryList.RemoveAt(position);
+        }
+    }
+
     //private void DebugPrintInventoryList(List<InventoryItem> inventoryList)
     //{
     //    foreach (InventoryItem inventoryItem in inventoryList)

@@ -72,8 +72,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemCode: 0
-  itemDescription1: 
-  sO_ItemList: {fileID: 11400000, guid: 084f66ef5ac9ff346a2824ec48fd9f4a, type: 2}
 --- !u!1 &200056557077581630
 GameObject:
   m_ObjectHideFlags: 0

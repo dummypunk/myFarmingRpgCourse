@@ -117,6 +117,28 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
     }
 
     /// <summary>
+    /// 利用fromItem参数与toItem参数进行inventory item交换位置
+    /// </summary>
+    /// <param name="inventoryLocation"></param>
+    /// <param name="fromItem"></param>
+    /// <param name="toItem"></param>
+    public void SwapInventoryItems(InventoryLocation inventoryLocation, int fromItem, int toItem)
+    {
+        //判断fromIndex参数与toItem参数在inventoryList的边界范围内，以及二者是否相等和大于等于零
+        if(fromItem< inventoryLists[(int)inventoryLocation].Count && toItem<inventoryLists[(int)inventoryLocation].Count
+            &&fromItem != toItem && fromItem >=0 && toItem >= 0)
+        {
+            InventoryItem fromInventoryItem = inventoryLists[(int)inventoryLocation][fromItem];
+            InventoryItem toInventoryItem = inventoryLists[(int)inventoryLocation][toItem];
+
+            inventoryLists[(int)inventoryLocation][fromItem] = toInventoryItem;
+            inventoryLists[(int)inventoryLocation][toItem] = fromInventoryItem;
+
+            EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryLists[(int)inventoryLocation]); 
+        }
+    }
+
+    /// <summary>
     /// 从可脚本化实例Item列表获取itemdetails补充字典
     /// </summary>
     private void CreateItemDetailsDictionary()  
@@ -176,7 +198,7 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         }
         else
         {
-            inventoryList.RemoveAt(position);
+            inventoryList.RemoveAt(position); 
         }
     }
 

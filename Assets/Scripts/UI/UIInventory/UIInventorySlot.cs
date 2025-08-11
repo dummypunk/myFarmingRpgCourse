@@ -5,9 +5,10 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler,IPointerEnterHandler,IPointerExitHandler
 {
     private Camera mainCamera;
+    private Canvas parentCanvas;
     private Transform parentItem;
     private GameObject draggedItem;
 
@@ -16,11 +17,16 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public TextMeshProUGUI textMeshProUGUI;
 
     [SerializeField] private UIInventoryBar inventoryBar = null;
+    [SerializeField] private GameObject inventoryTextBoxPrefab = null;
     [HideInInspector] public ItemDetails itemDetails;
     [SerializeField] private GameObject itemPrefab = null;
     [HideInInspector] public int itemQuantity;
     [SerializeField] private int slotNumber = 0;
 
+    private void Awake()
+    {
+        parentCanvas = GetComponentInParent<Canvas>();
+    }
     private void Start()
     {
         mainCamera = Camera.main;
@@ -88,6 +94,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
                 //交换inventory List中的inventory items
                 InventoryManager.Instance.SwapInventoryItems(InventoryLocation.player, slotNumber, toSlotNumber);
+
+                DestoryInventoryTextBox();
             }
             else
             {
@@ -101,4 +109,45 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         }
     }
 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if(itemQuantity != 0)
+        {
+            //实例化inventory textbox
+            inventoryBar.inventoryTextBoxGameobject = Instantiate(inventoryTextBoxPrefab, transform.position, Quaternion.identity);
+            inventoryBar.inventoryTextBoxGameobject.transform.SetParent(parentCanvas.transform, false);
+
+            UIInventoryTextBox inventoryTextBox = inventoryBar.inventoryTextBoxGameobject.GetComponent<UIInventoryTextBox>();
+
+            //获取itemtype描述
+            string itemTypeDescription = InventoryManager.Instance.GetItemTypeDescription(itemDetails.itemType);
+
+            //填充textbox
+            inventoryTextBox.SetTextBoxText(itemDetails.itemDescription, itemTypeDescription, "", itemDetails.itemLongDescription, "", "");
+
+            if (inventoryBar.IsInventoryBarPositionBottom)
+            {
+                inventoryBar.inventoryTextBoxGameobject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0f);
+                inventoryBar.inventoryTextBoxGameobject.transform.position = new Vector3(transform.position.x, transform.position.y + 50f, transform.position.z);
+            }
+            else
+            {
+                inventoryBar.inventoryTextBoxGameobject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+                inventoryBar.inventoryTextBoxGameobject.transform.position = new Vector3(transform.position.x, transform.position.y - 50f, transform.position.z);
+            }
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        DestoryInventoryTextBox();
+    }
+
+    public void DestoryInventoryTextBox()
+    {
+        if(inventoryBar.inventoryTextBoxGameobject != null)
+        {
+            Destroy(inventoryBar.inventoryTextBoxGameobject);
+        }
+    }
 }

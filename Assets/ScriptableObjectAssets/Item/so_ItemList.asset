@@ -15,7 +15,7 @@ MonoBehaviour:
   itemDetals:
   - itemCode: 10000
     itemType: 0
-    itemDescription: Canyon Oak Acom
+    itemDescription: Canyon Oak Acorn
     itemSprite: {fileID: 21300000, guid: 730e572c78cf0244ca0db36bb8f3af7f, type: 3}
     itemLongDescription: From small acorns do large oak trees grow.One day this humble
       acorn could be a towering giant!
@@ -168,7 +168,7 @@ MonoBehaviour:
   - itemCode: 10012
     itemType: 7
     itemDescription: Wicker Basket
-    itemSprite: {fileID: 21300050, guid: 853ac38383c680342ac7e688bf29b197, type: 3}
+    itemSprite: {fileID: 21300504, guid: 853ac38383c680342ac7e688bf29b197, type: 3}
     itemLongDescription: A wicker basket for harvesting produce you have grown
     itemUseGridRadius: 0
     itemUseRadius: 0

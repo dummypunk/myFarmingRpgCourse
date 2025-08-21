@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler,IPointerEnterHandler,IPointerExitHandler
+public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     private Camera mainCamera;
     private Canvas parentCanvas;
@@ -18,6 +18,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     [SerializeField] private UIInventoryBar inventoryBar = null;
     [SerializeField] private GameObject inventoryTextBoxPrefab = null;
+    [HideInInspector] public bool isSelected = false;
     [HideInInspector] public ItemDetails itemDetails;
     [SerializeField] private GameObject itemPrefab = null;
     [HideInInspector] public int itemQuantity;
@@ -34,11 +35,40 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     }
 
     /// <summary>
+    /// 设置该Inventory slot Item 被选中
+    /// </summary>
+    private void SetSelectedItem()
+    {
+        //清除当前已经选中物品高亮状态
+        inventoryBar.ClearHighLightOnInventorySlots();
+
+        //高亮选中物品
+        isSelected = true;
+
+        //设置高亮Inventory slot
+        inventoryBar.SetHighlightedInventorySlots();
+
+        //在Inventory中设置被选中物品
+        InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.itemCode);
+    }
+
+    private void ClearSelectedItem()
+    {
+        //清楚当前高亮物品
+        inventoryBar.ClearHighLightOnInventorySlots();
+
+        isSelected = false;
+
+        //设置没有物品在Inventory中被选中
+        InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
+    }
+
+    /// <summary>
     /// 丢弃inventorybar中可拖拽物品到鼠标位置，被dropitemEvent引用
     /// </summary>
     private void DropSelectedItemAtMousePosition()
     {
-        if(itemDetails != null)
+        if(itemDetails != null && isSelected)
         {
             Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
 
@@ -49,6 +79,12 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             
             //Remove item from inventory
             InventoryManager.Instance.RemoveItem(InventoryLocation.player, item.ItemCode);
+
+            //如果当前位置没有物品，取消高亮设置
+            if(InventoryManager.Instance.FindItemInInventory(InventoryLocation.player,item.ItemCode) == -1)
+            {
+                ClearSelectedItem();
+            }
         }
     }
 
@@ -67,6 +103,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             //获取拖拽物品的图像
             Image draggedItemImage = draggedItem.GetComponentInChildren<Image>();
             draggedItemImage.sprite = inventorySlotImage.sprite;
+
+            SetSelectedItem();
         }
     }
 
@@ -96,6 +134,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 InventoryManager.Instance.SwapInventoryItems(InventoryLocation.player, slotNumber, toSlotNumber);
 
                 DestoryInventoryTextBox();
+
+                ClearSelectedItem();
             }
             else
             {
@@ -138,6 +178,25 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         }
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        //左键点击
+        if(eventData.button == PointerEventData.InputButton.Left)
+        {
+            if(isSelected == true)
+            {
+                ClearSelectedItem();
+            }
+            else
+            {
+                if(itemQuantity > 0)
+                {
+                    SetSelectedItem();
+                }
+            }
+        }
+    }
+
     public void OnPointerExit(PointerEventData eventData)
     {
         DestoryInventoryTextBox();
@@ -150,4 +209,6 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             Destroy(inventoryBar.inventoryTextBoxGameobject);
         }
     }
+
+
 }

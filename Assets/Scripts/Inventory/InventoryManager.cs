@@ -6,6 +6,8 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
 {
     private Dictionary<int, ItemDetails> itemDetalsDictionary;
 
+    private int[] selectedInventoryItem; //该数组中的索引为Inventory List，数组值为Item code
+
     [SerializeField] private SO_ItemList itemList = null;
 
     public List<InventoryItem>[] inventoryLists;//根据数组的0,1顺序区分player和chest的枚举
@@ -19,6 +21,14 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         CreateItemDetailsDictionary();
 
         CreateInventoryLists();
+
+        //初始化选中物品的数组
+        selectedInventoryItem = new int[(int)InventoryLocation.count];
+
+        for (int i = 0; i < selectedInventoryItem.Length; i++)
+        {
+            selectedInventoryItem[i] = -1;
+        }
     }
 
     private void CreateInventoryLists()
@@ -139,6 +149,15 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
     }
 
     /// <summary>
+    /// clear
+    /// </summary>
+    /// <param name="inventoryLocation"></param>
+    public void ClearSelectedInventoryItem(InventoryLocation inventoryLocation)
+    {
+        selectedInventoryItem[(int)inventoryLocation] = -1;
+    }
+
+    /// <summary>
     /// 从可脚本化实例Item列表获取itemdetails补充字典
     /// </summary>
     private void CreateItemDetailsDictionary()  
@@ -229,6 +248,16 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         {
             inventoryList.RemoveAt(position); 
         }
+    }
+
+    /// <summary>
+    /// 将选定的Inventory Item设置为inventoryLocation中的itemCode
+    /// </summary>
+    /// <param name="inventoryLocation"></param>
+    /// <param name="itemCode"></param>
+    public void SetSelectedInventoryItem(InventoryLocation inventoryLocation,int itemCode)
+    {
+        selectedInventoryItem[(int)inventoryLocation] = itemCode;
     }
 
     //private void DebugPrintInventoryList(List<InventoryItem> inventoryList)

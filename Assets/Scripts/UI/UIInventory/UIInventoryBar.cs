@@ -27,6 +27,26 @@ public class UIInventoryBar : MonoBehaviour
         SwitchInventoryBarPosition();
     }
 
+    /// <summary>
+    /// 清除Inventory bar中所有高亮物品
+    /// </summary>
+    public  void ClearHighLightOnInventorySlots()
+    {
+        if (inventorySlot.Length > 0)
+        {
+            for (int i = 0; i < inventorySlot.Length; i++)
+            {
+                if (inventorySlot[i].isSelected)
+                {
+                    inventorySlot[i].isSelected = false;
+                    inventorySlot[i].inventorySlotHighlight.color = new Color(0, 0, 0,0);
+                    //更新Inventory显示没有物品被选中
+                    InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
+                }
+            }
+        }
+    }
+
     private void OnEnable()
     {
         EventHandler.InventoryUpdatedEvent += InventoryUpdated;
@@ -48,9 +68,12 @@ public class UIInventoryBar : MonoBehaviour
                 inventorySlot[i].textMeshProUGUI.text = "";
                 inventorySlot[i].itemDetails = null;
                 inventorySlot[i].itemQuantity = 0;
+                SetHighlightedInventorySlots(i);
             }
         }
     }
+
+
 
     private void InventoryUpdated(InventoryLocation inventoryLocation, List<InventoryItem> inventoryList)
     {
@@ -73,12 +96,43 @@ public class UIInventoryBar : MonoBehaviour
                         inventorySlot[i].textMeshProUGUI.text = inventoryList[i].itemQuantity.ToString();
                         inventorySlot[i].itemDetails = itemDetails;
                         inventorySlot[i].itemQuantity = inventoryList[i].itemQuantity;
+                        SetHighlightedInventorySlots(i);
                     }
                     else
                     {
                         break;
                     }
                 }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 遍历所有slot，根据条件设置高亮显示
+    /// </summary>
+    public void SetHighlightedInventorySlots()
+    {
+        if (inventorySlot.Length > 0)
+        {
+            for (int i = 0; i < inventorySlot.Length; i++)
+            {
+                SetHighlightedInventorySlots(i);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 重载方法：检查InventorySlot的每个格子是否被选中，如果被选中，则设置高光
+    /// </summary>
+    /// <param name="itemCode"></param>
+    public void SetHighlightedInventorySlots(int itemPosition)
+    {
+        if(inventorySlot.Length>0&&inventorySlot[itemPosition].itemDetails != null)
+        {
+            if (inventorySlot[itemPosition].isSelected)
+            {
+                inventorySlot[itemPosition].inventorySlotHighlight.color = new Color(1f, 1f, 1f, 1f);
+                InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, inventorySlot[itemPosition].itemDetails.itemCode);
             }
         }
     }

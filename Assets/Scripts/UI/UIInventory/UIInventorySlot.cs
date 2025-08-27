@@ -34,6 +34,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         parentItem = GameObject.FindGameObjectWithTag(Tags.ItemParentTransform).transform;
     }
 
+
+
     /// <summary>
     /// 设置该Inventory slot Item 被选中
     /// </summary>
@@ -50,6 +52,16 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         //在Inventory中设置被选中物品
         InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.itemCode);
+
+        if(itemDetails.canBeCarried == true)
+        {
+            //show player carrying Item
+            Player.Instance.ShowCarriedItem(itemDetails.itemCode);
+        }
+        else
+        {
+            Player.Instance.ClearCarriedItem();
+        }
     }
 
     private void ClearSelectedItem()
@@ -61,6 +73,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         //设置没有物品在Inventory中被选中
         InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
+
+        Player.Instance.ClearCarriedItem();
     }
 
     /// <summary>

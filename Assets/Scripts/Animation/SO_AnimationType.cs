@@ -7,7 +7,7 @@ public class SO_AnimationType : ScriptableObject
 {
     public AnimationClip animationClip;
     public AnimationName animationName;
-    public CharacterPartAnimator characterPartAnimatior;
+    public CharacterPartAnimator characterPart;
     public PartVariantColour partVariantColour;
     public PartVariantType partVariantType;
 }

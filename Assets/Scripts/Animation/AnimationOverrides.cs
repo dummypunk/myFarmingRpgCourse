@@ -15,7 +15,7 @@ public class AnimationOverrides : MonoBehaviour
         //初始化animation clip和animationType键值对
         animationTypeDictionaryByAnimation = new Dictionary<AnimationClip, SO_AnimationType>();
 
-        foreach(SO_AnimationType item in soAnimationTypeArray)
+        foreach (SO_AnimationType item in soAnimationTypeArray)
         {
             animationTypeDictionaryByAnimation.Add(item.animationClip, item);
         }
@@ -23,7 +23,7 @@ public class AnimationOverrides : MonoBehaviour
         //初始化string 和animationType键值对
         animationTypeDictionaryByCompositeAttributeKey = new Dictionary<string, SO_AnimationType>();
 
-        foreach(SO_AnimationType item in soAnimationTypeArray)
+        foreach (SO_AnimationType item in soAnimationTypeArray)
         {
             string key = item.characterPart.ToString() + item.partVariantColour.ToString() + item.partVariantType.ToString() + item.animationName.ToString();
             animationTypeDictionaryByCompositeAttributeKey.Add(key, item);
@@ -33,11 +33,11 @@ public class AnimationOverrides : MonoBehaviour
     public void ApplyCharacterCustomisationParamters(List<CharacterAttribute> characterAttributeList)
     {
         //遍历所有character attributes并设置重载的动画控制器
-        foreach(CharacterAttribute characterAttribute in characterAttributeList)
+        foreach (CharacterAttribute characterAttribute in characterAttributeList)
         {
             Animator currentAnimator = null;
             //当前动画和替代动画的键值对
-            List<KeyValuePair<AnimationClip,AnimationClip >> animsKeyValuePairList = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+            List<KeyValuePair<AnimationClip, AnimationClip>> animsKeyValuePairList = new List<KeyValuePair<AnimationClip, AnimationClip>>();
 
             string animatorSOAssetName = characterAttribute.characterPart.ToString();
 
@@ -46,7 +46,7 @@ public class AnimationOverrides : MonoBehaviour
 
             foreach (Animator animator in animatorArray)
             {
-                if(animator.name == animatorSOAssetName)
+                if (animator.name == animatorSOAssetName)
                 {
                     currentAnimator = animator;
                     break;
@@ -57,7 +57,7 @@ public class AnimationOverrides : MonoBehaviour
             AnimatorOverrideController aoc = new AnimatorOverrideController(currentAnimator.runtimeAnimatorController);
             List<AnimationClip> animationList = new List<AnimationClip>(aoc.animationClips);//通过overridecontroller检索控制器下所有animationClip，并创建animationClip列表
 
-            foreach(AnimationClip animationClip in animationList)
+            foreach (AnimationClip animationClip in animationList)
             {
                 //find animation in dictionary
                 SO_AnimationType so_AnimationType;
@@ -69,9 +69,9 @@ public class AnimationOverrides : MonoBehaviour
                         characterAttribute.partVariantType.ToString() + so_AnimationType.animationName.ToString();
 
                     SO_AnimationType swapSO_AnimationType;
-                    bool foundSwapAnimation = animationTypeDictionaryByCompositeAttributeKey.TryGetValue(key, out swapSO_AnimationType);    
+                    bool foundSwapAnimation = animationTypeDictionaryByCompositeAttributeKey.TryGetValue(key, out swapSO_AnimationType);
 
-                    if(foundAnimation)
+                    if (foundSwapAnimation)
                     {
                         AnimationClip swapAnimationClip = swapSO_AnimationType.animationClip;
 
@@ -83,7 +83,6 @@ public class AnimationOverrides : MonoBehaviour
             //apply animation updates to animation override controller and then update animator with the new controller
             aoc.ApplyOverrides(animsKeyValuePairList);
             currentAnimator.runtimeAnimatorController = aoc;
-
         }
     }
 }

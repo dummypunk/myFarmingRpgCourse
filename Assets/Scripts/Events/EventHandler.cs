@@ -41,4 +41,63 @@ public static class EventHandler
                           isSwingingToolRight, isSwingingToolLeft, isSwingingToolUp, isSwingingToolDown,
                           idleUp, idleDown, idleLeft, idleRight);
     }
+
+
+
+    //Time Event 
+    //Advance game minute
+    public static event Action<int, Season, int, string, int, int, int> AdvanceGameMinute;
+
+    public static void CallAdvanceGameMinuteEvent(int gameYear, Season gameSeason, int gameDay, string gameDayofWeek, int gameHour, int gameMinute, int gameSecond)
+    {
+        if(AdvanceGameMinute != null)
+        {
+            AdvanceGameMinute(gameYear, gameSeason, gameDay, gameDayofWeek, gameHour, gameMinute, gameSecond);
+        }
+    }
+
+    //Advance game hour
+    public static event Action<int, Season, int, string, int, int, int> AdvanceGameHour;
+
+    public static void CallAdvanceGameHourEvent(int gameYear, Season gameSeason, int gameDay, string gameDayofWeek, int gameHour, int gameMinute, int gameSecond)
+    {
+        if (AdvanceGameMinute != null)
+        {
+            AdvanceGameHour(gameYear, gameSeason, gameDay, gameDayofWeek, gameHour, gameMinute, gameSecond);
+        }
+    }
+
+    //Advance game Day
+    public static event Action<int, Season, int, string, int, int, int> AdvanceGameDay;
+
+    public static void CallAdvanceGameDayEvent(int gameYear, Season gameSeason, int gameDay, string gameDayofWeek, int gameHour, int gameMinute, int gameSecond)
+    {
+        if (AdvanceGameMinute != null)
+        {
+            AdvanceGameDay(gameYear, gameSeason, gameDay, gameDayofWeek, gameHour, gameMinute, gameSecond);
+        }
+    }
+
+
+    //Advance game Season
+    public static event Action<int, Season, int, string, int, int, int> AdvanceGameSeason;
+
+    public static void CallAdvanceGameSeasonEvent(int gameYear, Season gameSeason, int gameDay, string gameDayofWeek, int gameHour, int gameMinute, int gameSecond)
+    {
+        if (AdvanceGameMinute != null)
+        {
+            AdvanceGameSeason(gameYear, gameSeason, gameDay, gameDayofWeek, gameHour, gameMinute, gameSecond);
+        }
+    }
+
+    //Advance game Year
+    public static event Action<int, Season, int, string, int, int, int> AdvanceGameYear;
+
+    public static void CallAdvanceGameYearEvent(int gameYear, Season gameSeason, int gameDay, string gameDayofWeek, int gameHour, int gameMinute, int gameSecond)
+    {
+        if (AdvanceGameMinute != null)
+        {
+            AdvanceGameSeason(gameYear, gameSeason, gameDay, gameDayofWeek, gameHour, gameMinute, gameSecond);
+        }
+    }
 }

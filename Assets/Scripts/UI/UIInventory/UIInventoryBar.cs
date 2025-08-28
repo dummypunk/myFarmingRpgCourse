@@ -30,7 +30,7 @@ public class UIInventoryBar : MonoBehaviour
     /// <summary>
     /// 清除Inventory bar中所有高亮物品
     /// </summary>
-    public  void ClearHighLightOnInventorySlots()
+    public void ClearHighLightOnInventorySlots()
     {
         if (inventorySlot.Length > 0)
         {

@@ -52,6 +52,9 @@ public static class Settings
     public const string WateringTool = "Watering Can";
     public const string CollectingTool = "Basker";
 
+    //Time System
+    public const float secondPerGameSecond = 0.012f;
+
     // Static Constructor
     static Settings()
     {
@@ -83,5 +86,6 @@ public static class Settings
         idleDown = Animator.StringToHash("idleDown");
         idleLeft = Animator.StringToHash("idleLeft");
         idleRight = Animator.StringToHash("idleRight");
+
     }
 }

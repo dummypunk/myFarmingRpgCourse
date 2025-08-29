@@ -12,7 +12,7 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>
     private int gameSecond = 0;
     private string gameDayOfWeek = "Mon";
 
-    private bool gameClockPaused = false;
+    private bool gameClockPaused = false; 
 
     private float gameTick = 0f;
 
@@ -77,6 +77,9 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>
                             gameSeason = (Season)gs;
                             
                             gameYear++;
+
+                            if (gameYear > 9999)
+                                gameYear = 1;
                             
                             EventHandler.CallAdvanceGameYearEvent(gameYear, gameSeason, gameDay, gameDayOfWeek, gameHour, gameMinute, gameSecond);
                         } 
@@ -91,7 +94,6 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>
         }
         EventHandler.CallAdvanceGameMinuteEvent(gameYear, gameSeason, gameDay, gameDayOfWeek, gameHour, gameMinute,gameSecond);
         
-        Debug.Log("Game Year:" + gameYear + " Season:" + gameSeason + "Game Day: " + gameDay + "Game Hour: " + gameHour + "Game Minute: " + gameMinute);
     }
 
     private string GetDayOfWeek()
@@ -117,6 +119,22 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>
                 return "Sun";
             default:
                 return "";
+        }
+    }
+
+    public void TestAdvanceGameMinute()
+    {
+        for (int i = 0; i < 60; i++)
+        {
+            UpdateGameSecond();
+        }
+    }
+
+    public void TestAdvanceGameDay()
+    {
+        for (int i = 0; i < 84600; i++)
+        {
+            UpdateGameSecond();
         }
     }
 }

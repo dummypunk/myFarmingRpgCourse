@@ -8,7 +8,7 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
 
     private int[] selectedInventoryItem; //该数组中的索引为Inventory List，数组值为Item code
 
-    [SerializeField] private SO_ItemList itemList = null;
+    [SerializeField] private SO_ItemList so_itemList = null;
 
     public List<InventoryItem>[] inventoryLists;//根据数组的0,1顺序区分player和chest的枚举
 
@@ -163,7 +163,7 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
     private void CreateItemDetailsDictionary()  
     {
         itemDetalsDictionary = new Dictionary<int, ItemDetails>();
-        foreach(ItemDetails itemDetals in itemList.itemDetals)
+        foreach(ItemDetails itemDetals in so_itemList.itemDetals)
         {
             itemDetalsDictionary.Add(itemDetals.itemCode, itemDetals);
         }

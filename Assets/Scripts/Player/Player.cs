@@ -104,7 +104,7 @@ public class Player : SingletonMonobehaviour<Player>
     {
         Vector2 move = new Vector2(xInput * movementSpeed * Time.deltaTime, yInput * movementSpeed * Time.deltaTime);
         rigidbody2D.MovePosition(rigidbody2D.position + move);
-    }
+    }    
 
 
     private void PlayerWalkInput()

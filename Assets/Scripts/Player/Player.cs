@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class Player : SingletonMonobehaviour<Player>
 {
@@ -253,6 +254,11 @@ public class Player : SingletonMonobehaviour<Player>
         if (Input.GetKeyDown(KeyCode.G))
         {
             TimeManager.Instance.TestAdvanceGameMinute();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            SceneControllerManager.Instance.FadeAndLoadScene(SceneName.Scene1_Farm.ToString(),transform.position);
         }
     }
     

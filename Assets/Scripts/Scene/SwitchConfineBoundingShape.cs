@@ -1,25 +1,24 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Cinemachine;
 
 public class SwitchConfineBoundingShape : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Start()
+
+    private void OnEnable()
     {
-        SwitchBoundingShape();
+        EventHandler.AfterSceneLoadEvent += SwitchBoundingShape;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        EventHandler.AfterSceneLoadEvent -= SwitchBoundingShape;
     }
 
     /// <summary>
     /// 激活cinemachine专用的碰撞盒来限制相机超出地图边缘
     /// </summary>
-
-
     private void SwitchBoundingShape()
     {
         //获取多边形碰撞盒的gameobject“boundsConfiner”，避免摄像机超出地图边缘

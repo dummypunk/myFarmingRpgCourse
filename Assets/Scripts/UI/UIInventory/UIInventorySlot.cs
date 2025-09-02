@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
@@ -28,10 +30,20 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         parentCanvas = GetComponentInParent<Canvas>();
     }
+
+    private void OnEnable()
+    {
+        EventHandler.AfterSceneLoadEvent += SceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.AfterSceneLoadEvent -= SceneLoaded;
+    }
+
     private void Start()
     {
         mainCamera = Camera.main;
-        parentItem = GameObject.FindGameObjectWithTag(Tags.ItemParentTransform).transform;
     }
 
 
@@ -224,5 +236,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         }
     }
 
-
+    public void SceneLoaded()
+    {
+        parentItem = GameObject.FindGameObjectWithTag(Tags.ItemParentTransform).transform;
+    }
 }

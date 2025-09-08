@@ -2598,7 +2598,7 @@ GameObject:
   - component: {fileID: 1596180242}
   m_Layer: 0
   m_Name: UIInventoryBar
-  m_TagString: ItemsParentTransform
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3078,7 +3078,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 492ce80c61a38894cbc5d407954d1d35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemList: {fileID: 11400000, guid: 084f66ef5ac9ff346a2824ec48fd9f4a, type: 2}
+  so_itemList: {fileID: 11400000, guid: 084f66ef5ac9ff346a2824ec48fd9f4a, type: 2}
   inventoryListCapacityIntArray: 
 --- !u!4 &2023967275
 Transform:

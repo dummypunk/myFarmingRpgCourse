@@ -851,7 +851,7 @@ MonoBehaviour:
   fadeDuration: 1
   faderCanvanGroup: {fileID: 376313448}
   faderImage: {fileID: 376313446}
-  startingSceneName: 0
+  startingSceneName: 2
 --- !u!1 &511878093
 GameObject:
   m_ObjectHideFlags: 0
@@ -979,7 +979,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.25366986, g: 0.5377358, b: 0.043120332, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

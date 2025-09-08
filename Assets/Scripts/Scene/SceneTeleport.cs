@@ -17,8 +17,9 @@ public class SceneTeleport : MonoBehaviour
         if (player != null)
         {
             //计算玩家传送后的新坐标
+            //如果选择坐标的轴的值为0，则保持玩家本身位置的某个轴不变，
             float xPosition = Mathf.Approximately(scenePositionGoto.x, 0f) ? player.transform.position.x : scenePositionGoto.x;
-            float yPosition = Mathf.Approximately(scenePositionGoto.y, 0f) ? player.transform.position.         y : scenePositionGoto.y;
+            float yPosition = Mathf.Approximately(scenePositionGoto.y, 0f) ? player.transform.position.y : scenePositionGoto.y;
             float zPosition = 0f;
             
             SceneControllerManager.Instance.FadeAndLoadScene(sceneNameGoto.ToString(), new Vector3(xPosition, yPosition, zPosition));

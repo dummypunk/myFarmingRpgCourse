@@ -24,6 +24,8 @@ public class SceneControllerManager : SingletonMonobehaviour<SceneControllerMana
         
         EventHandler.CallAfterSceneLoadEvent();
         
+        SaveLoadManager.Instance.ReStoreCurrentSceneDate();
+        
         //当场景加载完毕，黑色背景渐变到透明
         StartCoroutine(Fade(0f));
     }
@@ -47,6 +49,9 @@ public class SceneControllerManager : SingletonMonobehaviour<SceneControllerMana
         //开始场景切换渐变，并阻止输入，持续一秒钟时间后继续
         yield return StartCoroutine(Fade(1f));
         
+        //保存当前场景中的数据
+        SaveLoadManager.Instance.StoreCurrentSceneDate();
+        
         //设置player position
         Player.Instance.gameObject.transform.position = spawnPosition;
         
@@ -59,6 +64,9 @@ public class SceneControllerManager : SingletonMonobehaviour<SceneControllerMana
         yield return StartCoroutine(LoadSceneSetActive(sceneName));
         
         EventHandler.CallAfterSceneLoadEvent();
+        
+        //恢复切换场景中的Item数据
+        SaveLoadManager.Instance.ReStoreCurrentSceneDate();
 
         yield return StartCoroutine(Fade(0f));
 

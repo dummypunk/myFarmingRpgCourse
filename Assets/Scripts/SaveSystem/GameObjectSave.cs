@@ -6,15 +6,15 @@ using UnityEngine;
 public class GameObjectSave
 {
     //string字符串为SceneName，通过SceneName来判别当前场景中的SceneData
-    public Dictionary<string, SceneSave> sceneData;
+    public Dictionary<string, SceneSave> sceneDataDict;
 
     public GameObjectSave()
     {
-        sceneData = new Dictionary<string, SceneSave>();
+        sceneDataDict = new Dictionary<string, SceneSave>();
     }
 
-    public GameObjectSave(Dictionary<string, SceneSave> sceneData)
+    public GameObjectSave(Dictionary<string, SceneSave> sceneDataDict)
     {
-        this.sceneData = sceneData;
+        this.sceneDataDict = sceneDataDict;
     }
 }

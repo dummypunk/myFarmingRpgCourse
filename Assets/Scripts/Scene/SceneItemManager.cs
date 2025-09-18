@@ -52,10 +52,9 @@ public class SceneItemManager : SingletonMonobehaviour<SceneItemManager>,ISaveab
             sceneItemsList.Add(sceneItem); 
         }
         
-        //在sceneSave中创建sceneItem列表，并在字典中添加列表
+        //在sceneSave中创建sceneItem列表
         SceneSave sceneSave = new SceneSave();
-        sceneSave.listSceneItemDictionary = new Dictionary<string, List<SceneItem>>();
-        sceneSave.listSceneItemDictionary.Add("sceneItemList", sceneItemsList);
+        sceneSave.listSceneItem = sceneItemsList;
         
         //添加sceneSave至GameObject
         GameObjectSave.sceneDataDict.Add(sceneName, sceneSave);
@@ -65,13 +64,13 @@ public class SceneItemManager : SingletonMonobehaviour<SceneItemManager>,ISaveab
     {
         if (GameObjectSave.sceneDataDict.TryGetValue(sceneName, out SceneSave sceneSave))
         {
-            if(sceneSave.listSceneItemDictionary != null && sceneSave.listSceneItemDictionary.TryGetValue("sceneItemList",out List<SceneItem> sceneItemList))
+            if(sceneSave.listSceneItem != null)
             {
                 //如果发现sceneItemLists，销毁当前存在于scene中的items
                 DestroySceneItems();
                 
                 //随后实例化新的scene items的list
-                InstantiateScenItems(sceneItemList);
+                InstantiateScenItems(sceneSave.listSceneItem);
             }
         }
     }

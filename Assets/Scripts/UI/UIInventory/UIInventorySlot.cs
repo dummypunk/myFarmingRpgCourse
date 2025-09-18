@@ -97,19 +97,28 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         if(itemDetails != null && isSelected)
         {
             Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
-
-            //在鼠标位置生成prefab物品
-            GameObject itemGameObject = Instantiate(itemPrefab, worldPosition, Quaternion.identity, parentItem);
-            Item item = itemGameObject.GetComponent<Item>();
-            item.ItemCode = itemDetails.itemCode;
             
-            //Remove item from inventory
-            InventoryManager.Instance.RemoveItem(InventoryLocation.player, item.ItemCode);
+            //根据tilemap的gridProperty判断物品是否能放置在这里
+            Vector3Int gridPosition = GridPropertiesManager.Instance.grid.WorldToCell(worldPosition);
+            GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(gridPosition.x, gridPosition.y);
 
-            //如果当前位置没有物品，取消高亮设置
-            if(InventoryManager.Instance.FindItemInInventory(InventoryLocation.player,item.ItemCode) == -1)
+            if (gridPropertyDetails != null && gridPropertyDetails.canDropItems)
             {
-                ClearSelectedItem();
+                //在鼠标位置生成prefab物品
+                GameObject itemGameObject = Instantiate(itemPrefab,
+                    new Vector3(worldPosition.x, worldPosition.y - Settings.gridCellSize / 2, worldPosition.z),
+                    Quaternion.identity, parentItem);
+                Item item = itemGameObject.GetComponent<Item>();
+                item.ItemCode = itemDetails.itemCode;
+            
+                //Remove item from inventory
+                InventoryManager.Instance.RemoveItem(InventoryLocation.player, item.ItemCode);
+
+                //如果当前位置没有物品，取消高亮设置
+                if(InventoryManager.Instance.FindItemInInventory(InventoryLocation.player,item.ItemCode) == -1)
+                {
+                    ClearSelectedItem();
+                }
             }
         }
     }

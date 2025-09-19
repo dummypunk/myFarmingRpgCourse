@@ -135,9 +135,8 @@ public class Player : SingletonMonobehaviour<Player>
 
     private void PlayerClickInput()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("****************************************************************");
             if (gridCursor.CursorIsEnabled)
             {
                 ProcessPlayerClickInput();

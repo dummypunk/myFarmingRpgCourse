@@ -12,6 +12,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private Camera mainCamera;
     private Canvas parentCanvas;
     private Transform parentItem;
+    private GridCursor gridCursor;
     private GameObject draggedItem;
 
     public Image inventorySlotHighlight;
@@ -30,24 +31,33 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         parentCanvas = GetComponentInParent<Canvas>();
     }
-
+    
     private void OnEnable()
     {
         EventHandler.AfterSceneLoadEvent += SceneLoaded;
+        EventHandler.DropSelectedItemEvent += DropSelectedItemAtMousePosition;
     }
 
     private void OnDisable()
     {
         EventHandler.AfterSceneLoadEvent -= SceneLoaded;
+        EventHandler.DropSelectedItemEvent -= DropSelectedItemAtMousePosition;
     }
 
     private void Start()
     {
         mainCamera = Camera.main;
+        gridCursor = FindObjectOfType<GridCursor>();
+        ClearCursor();
     }
 
+    private void ClearCursor()
+    {
+        gridCursor.DisableCursor();
 
-
+        gridCursor.SelectedItemType = ItemType.none;
+    }
+    
     /// <summary>
     /// 设置该Inventory slot Item 被选中
     /// </summary>
@@ -61,6 +71,22 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         //设置高亮Inventory slot
         inventoryBar.SetHighlightedInventorySlots();
+        
+        //设置道具使用半径
+        gridCursor.ItemUseGridRadius = itemDetails.itemUseGridRadius;
+        
+        //如果道具需要产生指针，则产生cursor
+        if (itemDetails.itemUseGridRadius > 0)
+        {
+            gridCursor.EnableCursor();
+        }
+        else
+        {
+            gridCursor.DisableCursor();
+        }
+        
+        //设置物品种类
+        gridCursor.SelectedItemType = itemDetails.itemType;
 
         //在Inventory中设置被选中物品
         InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.itemCode);
@@ -78,6 +104,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private void ClearSelectedItem()
     {
+        ClearCursor();
+        
         //清楚当前高亮物品
         inventoryBar.ClearHighLightOnInventorySlots();
 
@@ -96,14 +124,11 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         if(itemDetails != null && isSelected)
         {
-            Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
-            
-            //根据tilemap的gridProperty判断物品是否能放置在这里
-            Vector3Int gridPosition = GridPropertiesManager.Instance.grid.WorldToCell(worldPosition);
-            GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(gridPosition.x, gridPosition.y);
-
-            if (gridPropertyDetails != null && gridPropertyDetails.canDropItems)
+            if (gridCursor.CursorPositionIsValid)
             {
+                Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+                    Input.mousePosition.y, -mainCamera.transform.position.z));
+
                 //在鼠标位置生成prefab物品
                 GameObject itemGameObject = Instantiate(itemPrefab,
                     new Vector3(worldPosition.x, worldPosition.y - Settings.gridCellSize / 2, worldPosition.z),

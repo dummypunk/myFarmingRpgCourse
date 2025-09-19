@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class UIInventoryBar : MonoBehaviour
 {
     [SerializeField] private Sprite blank16x16Sprite = null;
-    [SerializeField] private UIInventorySlot[] inventorySlot = null;
+    [FormerlySerializedAs("inventorySlot")] [SerializeField] private UIInventorySlot[] UIInventorySlot = null;
     public GameObject inventoryBarDraggedItem;
     [HideInInspector] public GameObject inventoryTextBoxGameobject;
 
@@ -32,14 +33,14 @@ public class UIInventoryBar : MonoBehaviour
     /// </summary>
     public void ClearHighLightOnInventorySlots()
     {
-        if (inventorySlot.Length > 0)
+        if (UIInventorySlot.Length > 0)
         {
-            for (int i = 0; i < inventorySlot.Length; i++)
+            for (int i = 0; i < UIInventorySlot.Length; i++)
             {
-                if (inventorySlot[i].isSelected)
+                if (UIInventorySlot[i].isSelected)
                 {
-                    inventorySlot[i].isSelected = false;
-                    inventorySlot[i].inventorySlotHighlight.color = new Color(0, 0, 0,0);
+                    UIInventorySlot[i].isSelected = false;
+                    UIInventorySlot[i].inventorySlotHighlight.color = new Color(0, 0, 0,0);
                     //更新Inventory显示没有物品被选中
                     InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
                 }
@@ -59,15 +60,15 @@ public class UIInventoryBar : MonoBehaviour
 
     private void ClearInventorySlots()
     {
-        if (inventorySlot.Length > 0)
+        if (UIInventorySlot.Length > 0)
         {
             //遍历Inventory的所有slots然后利用空白sprite进行更新
-            for (int i = 0; i < inventorySlot.Length; i++)
+            for (int i = 0; i < UIInventorySlot.Length; i++)
             {
-                inventorySlot[i].inventorySlotImage.sprite = blank16x16Sprite;
-                inventorySlot[i].textMeshProUGUI.text = "";
-                inventorySlot[i].itemDetails = null;
-                inventorySlot[i].itemQuantity = 0;
+                UIInventorySlot[i].inventorySlotImage.sprite = blank16x16Sprite;
+                UIInventorySlot[i].textMeshProUGUI.text = "";
+                UIInventorySlot[i].itemDetails = null;
+                UIInventorySlot[i].itemQuantity = 0;
                 SetHighlightedInventorySlots(i);
             }
         }
@@ -81,10 +82,10 @@ public class UIInventoryBar : MonoBehaviour
         {
             ClearInventorySlots();
 
-            if (inventorySlot.Length > 0 && inventoryList.Count > 0)
+            if (UIInventorySlot.Length > 0 && inventoryList.Count > 0)
             {
                 //遍历所有Inventory格子并用相应的InventoryList进行更新列表中的物品
-                for (int i = 0; i < inventorySlot.Length; i++)
+                for (int i = 0; i < UIInventorySlot.Length; i++)
                 {
                     if (i < inventoryList.Count)
                     {
@@ -92,10 +93,10 @@ public class UIInventoryBar : MonoBehaviour
 
                         ItemDetails itemDetails = InventoryManager.Instance.GetItemDetails(itemCode);
 
-                        inventorySlot[i].inventorySlotImage.sprite = itemDetails.itemSprite;
-                        inventorySlot[i].textMeshProUGUI.text = inventoryList[i].itemQuantity.ToString();
-                        inventorySlot[i].itemDetails = itemDetails;
-                        inventorySlot[i].itemQuantity = inventoryList[i].itemQuantity;
+                        UIInventorySlot[i].inventorySlotImage.sprite = itemDetails.itemSprite;
+                        UIInventorySlot[i].textMeshProUGUI.text = inventoryList[i].itemQuantity.ToString();
+                        UIInventorySlot[i].itemDetails = itemDetails;
+                        UIInventorySlot[i].itemQuantity = inventoryList[i].itemQuantity;
                         SetHighlightedInventorySlots(i);
                     }
                     else
@@ -112,9 +113,9 @@ public class UIInventoryBar : MonoBehaviour
     /// </summary>
     public void SetHighlightedInventorySlots()
     {
-        if (inventorySlot.Length > 0)
+        if (UIInventorySlot.Length > 0)
         {
-            for (int i = 0; i < inventorySlot.Length; i++)
+            for (int i = 0; i < UIInventorySlot.Length; i++)
             {
                 SetHighlightedInventorySlots(i);
             }
@@ -127,12 +128,12 @@ public class UIInventoryBar : MonoBehaviour
     /// <param name="itemCode"></param>
     public void SetHighlightedInventorySlots(int itemPosition)
     {
-        if(inventorySlot.Length>0&&inventorySlot[itemPosition].itemDetails != null)
+        if(UIInventorySlot.Length > 0 && UIInventorySlot[itemPosition].itemDetails != null)
         {
-            if (inventorySlot[itemPosition].isSelected)
+            if (UIInventorySlot[itemPosition].isSelected)
             {
-                inventorySlot[itemPosition].inventorySlotHighlight.color = new Color(1f, 1f, 1f, 1f);
-                InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, inventorySlot[itemPosition].itemDetails.itemCode);
+                UIInventorySlot[itemPosition].inventorySlotHighlight.color = new Color(1f, 1f, 1f, 1f);
+                InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, UIInventorySlot[itemPosition].itemDetails.itemCode);
             }
         }
     }

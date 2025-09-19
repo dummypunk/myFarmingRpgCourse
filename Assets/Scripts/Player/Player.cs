@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class Player : SingletonMonobehaviour<Player>
 {
     private AnimationOverrides animationOverrides;
+    private GridCursor gridCursor;
     
     //Movement Parameters
     private float xInput;
@@ -82,7 +83,9 @@ public class Player : SingletonMonobehaviour<Player>
 
             PlayerWalkInput();
 
-            PlayerTestInput();
+            PlayerClickInput();
+            
+            //PlayerTestInput();
             
             EventHandler.CallMovementEvent(xInput, yInput, isWalking, isRunnning, isIdle, isCarrying, toolEffect,
                 isUsingToolRight, isUsingToolLeft, isUsingToolUp, isUsingToolDown,
@@ -93,6 +96,11 @@ public class Player : SingletonMonobehaviour<Player>
         }
 
         #endregion
+    }
+
+    private void Start()
+    {
+        gridCursor = FindObjectOfType<GridCursor>();
     }
 
     private void FixedUpdate()
@@ -125,6 +133,68 @@ public class Player : SingletonMonobehaviour<Player>
         }
     }
 
+    private void PlayerClickInput()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            Debug.Log("****************************************************************");
+            if (gridCursor.CursorIsEnabled)
+            {
+                ProcessPlayerClickInput();
+            }
+        }
+    }
+
+    private void ProcessPlayerClickInput()
+    {
+        ResetMovement();
+        
+        //GetSelectedItem Details
+        ItemDetails itemDetails = InventoryManager.Instance.GetSelectedInventoryItemDetails(InventoryLocation.player);
+
+        if (itemDetails != null)
+        {
+            switch (itemDetails.itemType)
+            {
+                case ItemType.Seed:
+                    if (Input.GetMouseButton(0))
+                    {
+                        ProcessPlayerClickInputSeed(itemDetails);
+                    }
+                    break;
+                
+                case ItemType.Commodity:
+                    if (Input.GetMouseButton(0))
+                    {
+                        ProcessPlayerClickInputCommodity(itemDetails);
+                    }
+                    break;
+                
+                case ItemType.none:
+                    break;
+                
+                case ItemType.count:
+                    break;
+            }
+        }
+    }
+
+    private void ProcessPlayerClickInputSeed(ItemDetails itemDetails)
+    {
+        if (itemDetails.canBeDroped && gridCursor.CursorPositionIsValid)
+        {
+            EventHandler.CallDropSelectItemEvent();
+        }
+    }
+    
+    private void ProcessPlayerClickInputCommodity(ItemDetails itemDetails)
+    {
+        if (itemDetails.canBeDroped && gridCursor.CursorPositionIsValid)
+        {
+            EventHandler.CallDropSelectItemEvent();
+        }
+    }
+    
     private void PlayerMovementInput()
     {
         xInput = Input.GetAxisRaw("Horizontal");
@@ -244,24 +314,24 @@ public class Player : SingletonMonobehaviour<Player>
     }
 
 
-    private void PlayerTestInput()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            TimeManager.Instance.TestAdvanceGameDay();
-        }
-
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            TimeManager.Instance.TestAdvanceGameMinute();
-        }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            SceneControllerManager.Instance.FadeAndLoadScene(SceneName.Scene1_Farm.ToString(),transform.position);
-        }
-    }
-    
+    // private void PlayerTestInput()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.T))
+    //     {
+    //         TimeManager.Instance.TestAdvanceGameDay();
+    //     }
+    //
+    //     if (Input.GetKeyDown(KeyCode.G))
+    //     {
+    //         TimeManager.Instance.TestAdvanceGameMinute();
+    //     }
+    //
+    //     if (Input.GetKeyDown(KeyCode.L))
+    //     {
+    //         SceneControllerManager.Instance.FadeAndLoadScene(SceneName.Scene1_Farm.ToString(),transform.position);
+    //     }
+    // }
+    //
     private void ResetMovement()
     {
         xInput = 0;

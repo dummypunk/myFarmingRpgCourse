@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using UnityEngine.EventSystems;
 
 public delegate void MovementDelegate
@@ -13,6 +14,15 @@ public delegate void MovementDelegate
 
 public static class EventHandler
 {
+    public static event Action DropSelectedItemEvent;
+    public static void CallDropSelectItemEvent()
+    {
+        if (DropSelectedItemEvent != null)
+        {
+            DropSelectedItemEvent();
+        }
+    }
+    
     public static event Action<InventoryLocation, List<InventoryItem>> InventoryUpdatedEvent;
 
     public static void CallInventoryUpdatedEvent(InventoryLocation inventoryLocation,List<InventoryItem> inventoryItems)

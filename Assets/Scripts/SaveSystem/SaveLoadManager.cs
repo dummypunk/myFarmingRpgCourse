@@ -9,7 +9,6 @@ public class SaveLoadManager : SingletonMonobehaviour<SaveLoadManager>
     protected override void Awake()
     {
         base.Awake();
-        
         iSaveableObjectsList = new List<ISaveable>();
     }
 

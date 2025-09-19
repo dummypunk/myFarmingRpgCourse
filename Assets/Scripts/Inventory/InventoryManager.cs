@@ -181,6 +181,30 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
             return null;
     }
 
+    public ItemDetails GetSelectedInventoryItemDetails(InventoryLocation inventoryLocation)
+    {
+        int itemCode = GetSelectedInventoryItem(inventoryLocation);
+
+        if (itemCode == -1)
+        {
+            return null;
+        }
+        else
+        {
+            return GetItemDetails(itemCode);
+        }
+    }
+    
+    /// <summary>
+    /// 根据inventory位置获取选中物品，返回itemconde，如果没有物品选中返回-1
+    /// </summary>
+    /// <param name="inventoryLocation"></param>
+    /// <returns></returns>
+    private int GetSelectedInventoryItem(InventoryLocation inventoryLocation)
+    {
+        return selectedInventoryItem[(int)inventoryLocation];
+    }
+
     public string GetItemTypeDescription(ItemType itemType)
     {
         string itemTypeDescription;

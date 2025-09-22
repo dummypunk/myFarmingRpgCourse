@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class GridCursor : MonoBehaviour
 {
@@ -111,8 +111,17 @@ public class GridCursor : MonoBehaviour
                         return;
                     }
                     break;
+                
                 case ItemType.Commodity:
                     if (!IsCursorValidForCommodity(gridPropertyDetails))
+                    {
+                        SetCursorToInvalid();
+                        return;
+                    }
+                    break;
+
+                case ItemType.Hoeing_tool:
+                    if(!IsCursorValidForTool(gridPropertyDetails, itemDetails))
                     {
                         SetCursorToInvalid();
                         return;
@@ -169,6 +178,11 @@ public class GridCursor : MonoBehaviour
         return grid.WorldToCell(worldPosition);
     }
 
+    public Vector3 GetWorldPositionForCursor()
+    {
+        return grid.CellToWorld(GetGridPositionForCursor());
+    }
+
     public Vector3Int GetGridPositionForPlayer()
     {
         return grid.WorldToCell(Player.Instance.transform.position);
@@ -191,5 +205,53 @@ public class GridCursor : MonoBehaviour
     {
         return gridPropertyDetails.canDropItems;
     }
-    
+
+
+    private bool IsCursorValidForTool(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails)
+    {
+        switch (itemDetails.itemType)
+        {
+            case ItemType.Hoeing_tool:
+                if (gridPropertyDetails.isDiggable == true && gridPropertyDetails.daySinceDug == -1)
+                {
+                    #region 获取所有items 检查其是是否为diggable
+                    //获取指针的世界坐标
+                    Vector3 cursorWorldPosition = new Vector3(GetWorldPositionForCursor().x + 0.5f, GetWorldPositionForCursor().y + 0.5f, 0);
+
+                    //在指针处获取物品列表
+                    List<Item> itemList = new List<Item>();
+
+                    HelperMethods.GetcomponentsAtBoxLoaction<Item>(out itemList, cursorWorldPosition , Settings.cursorSize, 0f);
+                    #endregion
+
+                    //遍历物品列表，检查是否为reapable
+                    bool foundReapable = false;
+                    
+                    foreach (Item item in itemList)
+                    {
+                        if (InventoryManager.Instance.GetItemDetails(item.ItemCode).itemType == ItemType.Reapable_sceneary)
+                        {
+                            foundReapable = true;
+                            break;
+                        }
+                    }
+
+                    //如果发现改grid上存在可收获的物品，则不能进行dig.
+                    if (foundReapable)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            default:
+                return false;
+        }
+    }
 }

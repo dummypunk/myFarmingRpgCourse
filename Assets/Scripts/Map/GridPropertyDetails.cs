@@ -9,7 +9,7 @@ public class GridPropertyDetails
     public bool canPlaceFurniture;
     public bool isPath;
     public bool isNPCObstacle;
-    public int daySinceDug;
+    public int daySinceDug = -1;
     public int daySinceWatered;
     public int seedItemcod;
     public int growthDays;

@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 5214806900299419085}
   m_Layer: 0
   m_Name: GroundDecoration1
-  m_TagString: Untagged
+  m_TagString: GroundDecoration1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -364,7 +364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb12a0d408f83c4d91dfe0c9e533cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridProperties: {fileID: 0}
+  so_gridProperties: {fileID: 0}
   gridBoolProperty: 0
 --- !u!1 &5214806900397486744
 GameObject:
@@ -379,7 +379,7 @@ GameObject:
   - component: {fileID: 5214806900397486758}
   m_Layer: 0
   m_Name: GroundDecoration2
-  m_TagString: Untagged
+  m_TagString: GroundDecoration2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -613,7 +613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb12a0d408f83c4d91dfe0c9e533cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridProperties: {fileID: 0}
+  so_gridProperties: {fileID: 0}
   gridBoolProperty: 0
 --- !u!1 &5214806900520617367
 GameObject:
@@ -745,7 +745,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb12a0d408f83c4d91dfe0c9e533cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridProperties: {fileID: 0}
+  so_gridProperties: {fileID: 0}
   gridBoolProperty: 0
 --- !u!1 &5214806900579076332
 GameObject:
@@ -1290,7 +1290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb12a0d408f83c4d91dfe0c9e533cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridProperties: {fileID: 0}
+  so_gridProperties: {fileID: 0}
   gridBoolProperty: 0
 --- !u!1 &5214806900995292503
 GameObject:
@@ -1861,5 +1861,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb12a0d408f83c4d91dfe0c9e533cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridProperties: {fileID: 0}
+  so_gridProperties: {fileID: 0}
   gridBoolProperty: 0

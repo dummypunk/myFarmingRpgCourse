@@ -300,6 +300,9 @@ public class Player : SingletonMonobehaviour<Player>
         //更新被挖掘后的gridProperty
         GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.gridX, gridPropertyDetails.gridY,gridPropertyDetails);
 
+        //display dug gird tiles
+        GridPropertiesManager.Instance.DisplayDugGround(gridPropertyDetails); 
+        
         //避免动画更新过快
         yield return afterUseToolAnimationPause;
         

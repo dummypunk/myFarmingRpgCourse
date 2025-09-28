@@ -81,6 +81,8 @@ public class Player : SingletonMonobehaviour<Player>
     {
         #region Player Input
 
+        PlayerTestInput();
+        
         if (!PlayerInputIsDisabled)
         {
             ResetAnimationTriggers();
@@ -90,8 +92,8 @@ public class Player : SingletonMonobehaviour<Player>
             PlayerWalkInput();
 
             PlayerClickInput();
+
             
-            //PlayerTestInput();
             
             EventHandler.CallMovementEvent(xInput, yInput, isWalking, isRunnning, isIdle, isCarrying, toolEffect,
                 isUsingToolRight, isUsingToolLeft, isUsingToolUp, isUsingToolDown,
@@ -313,6 +315,8 @@ public class Player : SingletonMonobehaviour<Player>
         
         GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.gridX, gridPropertyDetails.gridY, gridPropertyDetails);
 
+        GridPropertiesManager.Instance.DisplayWateredGround(gridPropertyDetails);
+        
         yield return afterLiftToolAnimationPause;
         
         playerToolUseDisabled = false;
@@ -485,24 +489,24 @@ public class Player : SingletonMonobehaviour<Player>
     }
 
 
-    // private void PlayerTestInput()
-    // {
-    //     if (Input.GetKeyDown(KeyCode.T))
-    //     {
-    //         TimeManager.Instance.TestAdvanceGameDay();
-    //     }
-    //
-    //     if (Input.GetKeyDown(KeyCode.G))
-    //     {
-    //         TimeManager.Instance.TestAdvanceGameMinute();
-    //     }
-    //
-    //     if (Input.GetKeyDown(KeyCode.L))
-    //     {
-    //         SceneControllerManager.Instance.FadeAndLoadScene(SceneName.Scene1_Farm.ToString(),transform.position);
-    //     }
-    // }
-    //
+    private void PlayerTestInput()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            TimeManager.Instance.TestAdvanceGameDay();
+        }
+    
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            TimeManager.Instance.TestAdvanceGameMinute();
+        }
+    
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            SceneControllerManager.Instance.FadeAndLoadScene(SceneName.Scene1_Farm.ToString(),transform.position);
+        }
+    }
+    
     private void ResetMovement()
     {
         xInput = 0;

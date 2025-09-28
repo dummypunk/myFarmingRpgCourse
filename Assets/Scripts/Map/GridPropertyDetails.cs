@@ -10,10 +10,10 @@ public class GridPropertyDetails
     public bool isPath;
     public bool isNPCObstacle;
     public int daySinceDug = -1;
-    public int daySinceWatered;
+    public int daySinceWatered = -1;
     public int seedItemcod;
     public int growthDays;
-    public int daysSinceLastHarvest;
+    public int daysSinceLastHarvest = -1;
 
     public GridPropertyDetails()
     {

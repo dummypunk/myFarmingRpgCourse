@@ -119,7 +119,15 @@ public class GridCursor : MonoBehaviour
                         return;
                     }
                     break;
-
+                
+                case ItemType.Watering_tool:
+                    if(!IsCursorValidForTool(gridPropertyDetails, itemDetails))
+                    {
+                        SetCursorToInvalid();
+                        return;
+                    }
+                    break;
+                    
                 case ItemType.Hoeing_tool:
                     if(!IsCursorValidForTool(gridPropertyDetails, itemDetails))
                     {
@@ -127,6 +135,7 @@ public class GridCursor : MonoBehaviour
                         return;
                     }
                     break;
+                
                 
                 case ItemType.none:
                     break;
@@ -250,6 +259,17 @@ public class GridCursor : MonoBehaviour
                 {
                     return false;
                 }
+                
+            case ItemType.Watering_tool:
+                if (gridPropertyDetails.daySinceDug > -1 && gridPropertyDetails.daySinceWatered == -1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            
             default:
                 return false;
         }

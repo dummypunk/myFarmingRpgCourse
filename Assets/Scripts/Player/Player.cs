@@ -478,6 +478,11 @@ public class Player : SingletonMonobehaviour<Player>
         return mainCamera.WorldToViewportPoint(transform.position);
     }
 
+    public Vector3 GetPlayerCentrePosition()
+    {
+        return new Vector3(transform.position.x, transform.position.y + Settings.playerCentreYOffset, transform.position.z);
+    }
+
     public void EnablePlayerInput()
     {
         PlayerInputIsDisabled = false;
@@ -530,4 +535,6 @@ public class Player : SingletonMonobehaviour<Player>
                 isSwingingToolRight, isSwingingToolLeft, isSwingingToolUp, isSwingingToolDown,
                 false, false, false, false);
     }
+    
+    
 }

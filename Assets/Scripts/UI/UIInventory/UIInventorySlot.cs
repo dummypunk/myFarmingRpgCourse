@@ -13,6 +13,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private Canvas parentCanvas;
     private Transform parentItem;
     private GridCursor gridCursor;
+    private Cursor cursor;
     private GameObject draggedItem;
 
     public Image inventorySlotHighlight;
@@ -48,14 +49,17 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         mainCamera = Camera.main;
         gridCursor = FindObjectOfType<GridCursor>();
+        cursor = FindObjectOfType<Cursor>();
         ClearCursor();
     }
 
     private void ClearCursor()
     {
         gridCursor.DisableCursor();
+        cursor.DisableCursor();
 
         gridCursor.SelectedItemType = ItemType.none;
+        cursor.SelectedItemType = ItemType.none;
     }
     
     /// <summary>
@@ -74,6 +78,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         
         //设置道具使用半径
         gridCursor.ItemUseGridRadius = itemDetails.itemUseGridRadius;
+        cursor.ItemUseRadius = itemDetails.itemUseRadius;
         
         //如果道具需要产生指针，则产生cursor
         if (itemDetails.itemUseGridRadius > 0)
@@ -84,9 +89,19 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             gridCursor.DisableCursor();
         }
+
+        if (itemDetails.itemUseRadius > 0)
+        {
+            cursor.EnableCursor();
+        }
+        else
+        {
+            cursor.DisableCursor();
+        }
         
         //设置物品种类
         gridCursor.SelectedItemType = itemDetails.itemType;
+        cursor.SelectedItemType = itemDetails.itemType;
 
         //在Inventory中设置被选中物品
         InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.itemCode);

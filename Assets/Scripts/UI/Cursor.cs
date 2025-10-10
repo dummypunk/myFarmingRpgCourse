@@ -174,7 +174,7 @@ public class Cursor : MonoBehaviour
         CursorIsEnabled = true;
     }
     
-    private Vector3 GetWorldPositionForCursor()
+    public Vector3 GetWorldPositionForCursor()
     {
         Vector3 screenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f);
         
@@ -183,7 +183,7 @@ public class Cursor : MonoBehaviour
         return worldPosition;
     }
 
-    private Vector3 GetRectTransformPositionForCursor()
+    public Vector3 GetRectTransformPositionForCursor()
     {
         Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 

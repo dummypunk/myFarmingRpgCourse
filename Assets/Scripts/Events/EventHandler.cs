@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
 using UnityEngine.EventSystems;
+using UnityEngine;
 
 public delegate void MovementDelegate
     (float inputX, float inputY, bool isWalking, bool isRunning, bool isIdle,
@@ -20,6 +21,17 @@ public static class EventHandler
         if (DropSelectedItemEvent != null)
         {
             DropSelectedItemEvent();
+        }
+    }
+    
+    public static event Action<Vector3, HarvestActionEffect> HarvestActionEffectEvent;
+
+    public static void CallHarvestActionEffectEvent(Vector3 effectPosition,
+        HarvestActionEffect harvestActionEvent)
+    {
+        if (HarvestActionEffectEvent != null)
+        {
+            HarvestActionEffectEvent(effectPosition, harvestActionEvent);
         }
     }
     

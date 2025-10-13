@@ -496,7 +496,9 @@ public class Player : SingletonMonobehaviour<Player>
                 {
                     //产生effect
                     Vector3 effectPosition = new Vector3(itemArray[i].transform.position.x,itemArray[i].transform.position.y + Settings.gridCellSize/2f, itemArray[i].transform.position.z);
-                
+
+                    EventHandler.CallHarvestActionEffectEvent(effectPosition, HarvestActionEffect.reaping);
+                    
                     Destroy(itemArray[i].gameObject);
                 
                     reapableItemCount++;
@@ -645,7 +647,6 @@ public class Player : SingletonMonobehaviour<Player>
         {
             TimeManager.Instance.TestAdvanceGameMinute();
         }
-        
     }
     
     private void ResetMovement()

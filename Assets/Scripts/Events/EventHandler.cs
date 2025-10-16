@@ -24,6 +24,15 @@ public static class EventHandler
         }
     }
     
+    // Remove selected item from inventory
+    public static event Action RemoveSelectedItemFromInventoryEvent;
+    
+    public static void CallRemoveSelectedItemFromInventoryEvent()
+    {
+        if (RemoveSelectedItemFromInventoryEvent != null)
+            RemoveSelectedItemFromInventoryEvent();
+    }
+    
     public static event Action<Vector3, HarvestActionEffect> HarvestActionEffectEvent;
 
     public static void CallHarvestActionEffectEvent(Vector3 effectPosition,

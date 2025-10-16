@@ -200,7 +200,7 @@ public class Player : SingletonMonobehaviour<Player>
                 case ItemType.Seed:
                     if (Input.GetMouseButton(0))
                     {
-                        ProcessPlayerClickInputSeed(itemDetails);
+                        ProcessPlayerClickInputSeed(gridPropertyDetails,itemDetails);
                     }
                     break;
                 
@@ -275,12 +275,28 @@ public class Player : SingletonMonobehaviour<Player>
         }
     }
 
-    private void ProcessPlayerClickInputSeed(ItemDetails itemDetails)
+    private void ProcessPlayerClickInputSeed(GridPropertyDetails gridPropertyDetails ,ItemDetails itemDetails)
     {
+        if (itemDetails.canBeDroped && gridCursor.CursorPositionIsValid && gridPropertyDetails.daySinceDug > -1 &&
+            gridPropertyDetails.seedItemCode == -1)
+        {
+            PlantSeedAtCursor(gridPropertyDetails, itemDetails);
+        }
+        
         if (itemDetails.canBeDroped && gridCursor.CursorPositionIsValid)
         {
             EventHandler.CallDropSelectItemEvent();
         }
+    }
+
+    private void PlantSeedAtCursor(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails)
+    {
+        gridPropertyDetails.seedItemCode = itemDetails.itemCode;
+        gridPropertyDetails.growthDays = 0;
+        
+        GridPropertiesManager.Instance.DisplayPlantedCrop(gridPropertyDetails);
+        
+        EventHandler.CallRemoveSelectedItemFromInventoryEvent();
     }
     
     private void ProcessPlayerClickInputCommodity(ItemDetails itemDetails)
@@ -638,12 +654,12 @@ public class Player : SingletonMonobehaviour<Player>
 
     private void PlayerTestInput()
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.G))
         {
             TimeManager.Instance.TestAdvanceGameDay();
         }
     
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             TimeManager.Instance.TestAdvanceGameMinute();
         }

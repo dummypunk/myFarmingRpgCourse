@@ -11,7 +11,7 @@ public class GridPropertyDetails
     public bool isNPCObstacle;
     public int daySinceDug = -1;
     public int daySinceWatered = -1;
-    public int seedItemcod;
+    public int seedItemCode = -1;
     public int growthDays;
     public int daysSinceLastHarvest = -1;
 

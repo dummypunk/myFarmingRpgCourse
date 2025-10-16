@@ -14,7 +14,7 @@ public class CropDetail
     
     [ItemCodeDescription]
     public int harvestedTransformItemCode; // 如果物品在收割时转变为另一个物品，则填入该物品代码
-    public bool hiddenOpBeforeHarvestedAnimation; // 是否在收割动画前禁用作物
+    public bool hideCropBeforeHarvestedAnimation; // 是否在收割动画前禁用作物
     public bool disableCropCollidersBeforeHarvestedAnimation; // 是否禁用作物的碰撞体，以避免收割动画影响其他游戏对象
     public bool isHarvestedAnimation; // 是否在最终生长阶段预制体上播放收割动画
     public bool isHarvestActionEffect = false; // 是否有收割动作效果的标志

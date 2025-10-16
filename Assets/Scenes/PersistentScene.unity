@@ -985,6 +985,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7caa14b8eb4862c49ae037a59e09b3be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  so_CropDetailsList: {fileID: 11400000, guid: 626f336beed7ac64a94da98eeda75f17, type: 2}
   so_gridPropertiesArray:
   - {fileID: 11400000, guid: 9b6428a7d20364e4ba67602d95036526, type: 2}
   - {fileID: 11400000, guid: 42f6fc465f29dd14da5f5b378651a75d, type: 2}

@@ -37,12 +37,15 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         EventHandler.AfterSceneLoadEvent += SceneLoaded;
         EventHandler.DropSelectedItemEvent += DropSelectedItemAtMousePosition;
+        EventHandler.RemoveSelectedItemFromInventoryEvent += RemoveSelectedItemFromInventory;
     }
-
+    
     private void OnDisable()
     {
         EventHandler.AfterSceneLoadEvent -= SceneLoaded;
         EventHandler.DropSelectedItemEvent -= DropSelectedItemAtMousePosition;
+        EventHandler.RemoveSelectedItemFromInventoryEvent -= RemoveSelectedItemFromInventory;
+
     }
 
     private void Start()
@@ -162,8 +165,23 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             }
         }
     }
-
-
+    
+    private void RemoveSelectedItemFromInventory()
+    {
+        if (itemDetails != null && isSelected)
+        {
+            int itemcode = itemDetails.itemCode;
+            
+            InventoryManager.Instance.RemoveItem(InventoryLocation.player, itemcode);
+            
+            //如果物品数量为零则取消选中状态
+            if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.player, itemcode) == -1)
+            {
+                ClearSelectedItem();
+            }
+        }
+    }
+    
     public void OnBeginDrag(PointerEventData eventData)
     {
         //当玩家拖拽的物品slot中itemdetail不为空时，进行逻辑

@@ -86,8 +86,8 @@ public class SceneItemManager : SingletonMonobehaviour<SceneItemManager>,ISaveab
             Destroy(itemsInScene[i].gameObject);
         }
     }
-
-    private void InstantiateScenItems(List<SceneItem> sceneItemList)
+ 
+    public void InstantiateScenItems(List<SceneItem> sceneItemList)
     {
         GameObject itemGameObject;
 
@@ -99,6 +99,18 @@ public class SceneItemManager : SingletonMonobehaviour<SceneItemManager>,ISaveab
             item.ItemCode = sceneItem.itemCode;
             item.name = sceneItem.itemName;
         }
+    }
+
+    public void InstantiateScenItem(int itemCode, Vector3 position)
+    {
+        ItemDetails itemDetails = InventoryManager.Instance.GetItemDetails(itemCode);
+        
+        GameObject itemGameObject;
+        
+        itemGameObject = Instantiate(itemPrefab, new Vector3(position.x, position.y, position.z), Quaternion.identity, parentItem);
+
+        Item item = itemGameObject.GetComponent<Item>();
+        item.ItemCode = itemDetails.itemCode;
     }
     
     private void OnDisable()

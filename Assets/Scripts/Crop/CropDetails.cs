@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public class CropDetail
+public class CropDetails
 {
     [ItemCodeDescription]
     public int seedItemCode; // 对应种子的物品代码

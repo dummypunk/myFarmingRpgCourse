@@ -76,6 +76,25 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryLists[(int)inventoryLocation]);
     }
 
+    public void AddItem(InventoryLocation inventoryLocation, int itemCode)
+    {
+        List<InventoryItem> inventoryList = inventoryLists[(int)inventoryLocation];
+        
+        //检查inventory是否已经包含item
+        int itemPosition = FindItemInInventory(inventoryLocation, itemCode);
+
+        if (itemPosition != -1)
+        {
+            AddItemAtPosition(inventoryList, itemCode, itemPosition);
+        }
+        else
+        {
+            AddItemAtPosition(inventoryList, itemCode);
+        }
+        
+        EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryLists[(int)inventoryLocation]);
+    }
+    
     /// <summary>
     /// 将物品添加进inventory的末尾
     /// </summary>

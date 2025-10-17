@@ -387,16 +387,16 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         if (gridPropertyDetails.seedItemCode > -1)
         {
             // 获取作物详情
-            CropDetail cropDetails = so_CropDetailsList.GetCropDetails(gridPropertyDetails.seedItemCode);
+            CropDetails cropDetailses = so_CropDetailsList.GetCropDetails(gridPropertyDetails.seedItemCode);
     
             // 要使用的预制体
             GameObject cropPrefab;
     
             // 在网格位置实例化作物预制体
-            int growthStages = cropDetails.growthDays.Length;
+            int growthStages = cropDetailses.growthDays.Length;
             
             int currentGrowthStage = 0;
-            int daysCounter = cropDetails.totalGrowthDays;
+            int daysCounter = cropDetailses.totalGrowthDays;
     
             for (int i = growthStages - 1; i >= 0; i--)
             {
@@ -405,12 +405,12 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
                     currentGrowthStage = i;
                     break;
                 }
-                daysCounter = daysCounter - cropDetails.growthDays[i];
+                daysCounter = daysCounter - cropDetailses.growthDays[i];
             }
 
-            cropPrefab = cropDetails.growthPrefab[currentGrowthStage];
+            cropPrefab = cropDetailses.growthPrefab[currentGrowthStage];
             
-            Sprite growthSprite = cropDetails.growthSprite[currentGrowthStage];
+            Sprite growthSprite = cropDetailses.growthSprite[currentGrowthStage];
 
             Vector3 worldPosition = groundDecoration2.CellToWorld(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY, 0));
             
@@ -569,6 +569,33 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         {
             return gridPropertyDetails;
         }
+    }
+
+    public Crop GetCropObjectAtLocation(GridPropertyDetails gridPropertyDetails)
+    {
+        Vector3 worldPosition = grid.GetCellCenterWorld(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY, 0));
+        Collider2D[] collider2DArray = Physics2D.OverlapPointAll(worldPosition);
+        
+        //遍历碰撞器数组
+        Crop crop = null;
+
+        for (int i = 0; i < collider2DArray.Length; i++)
+        {
+            crop = collider2DArray[i].gameObject.GetComponentInParent<Crop>();
+            if (crop != null && crop.cropGridPosition == new Vector2Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY))
+                break;
+            
+            crop = collider2DArray[i].gameObject.GetComponentInParent<Crop>();
+            if (crop != null && crop.cropGridPosition == new Vector2Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY))
+                break;
+        }
+        
+        return crop;
+    }
+
+    public CropDetails GetCropDetails(int seedItemCode)
+    {
+        return so_CropDetailsList.GetCropDetails(seedItemCode);
     }
 
     public void SetGridPropertyDetails(int gridX, int gridY, GridPropertyDetails gridPropertyDetails)

@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: so_CropDetailsList
   m_EditorClassIdentifier: Assembly-CSharp::CropDetailsList
   cropDetails:
-  - seedItemCode: 10007
+  - seedItemCode: 10006
     growthDays: 0000000001000000010000000100000002000000
     totalGrowthDays: 5
-    growthPrefab: []
+    growthPrefab:
+    - {fileID: 8628276900734622326, guid: c5042db586c1e5747a80882a3c98df1c, type: 3}
+    - {fileID: 8628276900734622326, guid: c5042db586c1e5747a80882a3c98df1c, type: 3}
+    - {fileID: 8628276900734622326, guid: c5042db586c1e5747a80882a3c98df1c, type: 3}
+    - {fileID: 8628276900734622326, guid: c5042db586c1e5747a80882a3c98df1c, type: 3}
+    - {fileID: 8628276900734622326, guid: c5042db586c1e5747a80882a3c98df1c, type: 3}
     growthSprite:
     - {fileID: 6634833228405365077, guid: 5a1df36ac90cfa242908df77f9674580, type: 3}
     - {fileID: -8204859348171178890, guid: 5a1df36ac90cfa242908df77f9674580, type: 3}

@@ -19,9 +19,11 @@ public static class Settings
     public const float walkingSpeed = 2.666f;
     public static float useToolAnimationPause = 0.25f;
     public static float liftToolAnimationPause = 0.4f;
+    public static float pickAnimationPause = 1f;
     public static float afterUseToolAnimationPause = 0.2f;
     public static float afterLiftToolAnimationPause = 0.4f;
-
+    public static float afterPickAnimationPause = 0.2f;
+    
     //Inventory
     public static int playerInitialInventoryCapacity = 24;
     public static int playerMaximumInventoryCapacity = 48;
@@ -92,7 +94,7 @@ public static class Settings
         isSwingingToolUp = Animator.StringToHash("isSwingingToolUp");
         isSwingingToolDown = Animator.StringToHash("isSwingingToolDown");
         isPickingRight = Animator.StringToHash("isPickingRight");
-        isPickingLeft = Animator.StringToHash("ispickingLeft");
+        isPickingLeft = Animator.StringToHash("isPickingLeft");
         isPickingUp = Animator.StringToHash("isPickingUp");
         isPickingDown = Animator.StringToHash("isPickingDown");
 

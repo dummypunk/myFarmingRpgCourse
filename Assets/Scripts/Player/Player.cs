@@ -296,12 +296,16 @@ public class Player : SingletonMonobehaviour<Player>
 
     private void PlantSeedAtCursor(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails)
     {
-        gridPropertyDetails.seedItemCode = itemDetails.itemCode;
-        gridPropertyDetails.growthDays = 0;
+        //仅在有cropdetails中存在seedItem code中执行
+        if (GridPropertiesManager.Instance.GetCropDetails(itemDetails.itemCode) != null)
+        {
+            gridPropertyDetails.seedItemCode = itemDetails.itemCode;
+            gridPropertyDetails.growthDays = 0;
         
-        GridPropertiesManager.Instance.DisplayPlantedCrop(gridPropertyDetails);
+            GridPropertiesManager.Instance.DisplayPlantedCrop(gridPropertyDetails);
         
-        EventHandler.CallRemoveSelectedItemFromInventoryEvent();
+            EventHandler.CallRemoveSelectedItemFromInventoryEvent();
+        }
     }
     
     private void ProcessPlayerClickInputCommodity(ItemDetails itemDetails)
@@ -583,7 +587,7 @@ public class Player : SingletonMonobehaviour<Player>
             switch (equippedItemDetails.itemType)
             {
                 case ItemType.Collecting_tool:
-                    crop.ProcessToolAction(equippedItemDetails);
+                    crop.ProcessToolAction(equippedItemDetails, isPickingRight, isPickingLeft, isPickingUp, isPickingDown);
                     break;
             }
         }

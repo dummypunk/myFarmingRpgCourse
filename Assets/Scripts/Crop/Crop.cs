@@ -7,13 +7,18 @@ using Random = System.Random;
 public class Crop : MonoBehaviour
 {
     private int harvestActionCount = 0;
+    
+    [Tooltip("Should be populated from child game object")]
+    [SerializeField] private SpriteRenderer cropHarvestedSpriteRenderer = null;
+    
     [HideInInspector]
     public Vector2Int cropGridPosition;
 
-    public void ProcessToolAction(ItemDetails equippedItemDetails)
+    public void ProcessToolAction(ItemDetails equippedItemDetails, bool isToolRight, bool isToolLeft, bool isToolUp, bool isToolDown)
     {
         //获取gird Property Detailss
         GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(cropGridPosition.x, cropGridPosition.y);
+        
         if (gridPropertyDetails == null)
             return;
         
@@ -27,33 +32,98 @@ public class Crop : MonoBehaviour
         if(cropDetails == null)
             return;
         
-        //通过以上if判断，增加收割次数
-        harvestActionCount++;
+        //如果庄稼动画机存在，获取其动画机
+        Animator animator = GetComponentInChildren<Animator>();
+        
+        //触发动画机工具动画
+        if (animator == null)
+        {
+            if (isToolRight || isToolUp)
+            {
+                animator.SetTrigger("usetoolright");
+            }
+            else if (isToolDown || isToolLeft)
+            {
+                animator.SetTrigger("usetoolleft"); 
+            }
+        }
+        
+        
         
         //获取庄稼需要的收割次数
         int requiredHarvestActions = cropDetails.RequiredHarvestActionsForTool(equippedItemDetails.itemCode);
         if (requiredHarvestActions == -1)
             return;
 
+        //通过以上if判断，增加收割次数
+        harvestActionCount++;
+
         if (harvestActionCount >= requiredHarvestActions)
         {
-            HarvestCrop(cropDetails, gridPropertyDetails);
+            HarvestCrop(isToolRight, isToolUp, cropDetails, gridPropertyDetails, animator);
         }
     }
 
-    private void HarvestCrop(CropDetails cropDetails, GridPropertyDetails gridPropertyDetails)
+    private void HarvestCrop(bool isUsingToolRight,bool isUsingToolUp,CropDetails cropDetails, GridPropertyDetails gridPropertyDetails,Animator animator)
     {
+        //判断是否有收获动画
+        if (cropDetails.isHarvestedAnimation && animator != null)
+        {
+            //如果有Harvest Sprite则添加至Sprite render
+            if (cropDetails.harvestedSprite != null)
+            {
+                if (cropHarvestedSpriteRenderer != null)
+                {
+                    cropHarvestedSpriteRenderer.sprite = cropDetails.harvestedSprite;
+                }
+            }
+
+            if (isUsingToolRight || isUsingToolUp)
+            {
+                animator.SetTrigger("harvestright");
+            }
+            else
+            {
+                animator.SetTrigger("harvestleft");
+            }
+        }
+        
         //删除网格上的crop
         gridPropertyDetails.seedItemCode = -1;
         gridPropertyDetails.growthDays = -1;
         gridPropertyDetails.daysSinceLastHarvest = -1;
         gridPropertyDetails.daySinceWatered = -1;
         
+        //在收获动画完成前隐藏Crop,
+        if (cropDetails.hideCropBeforeHarvestedAnimation)
+        {
+            GetComponentInChildren<SpriteRenderer>().enabled = false;
+        }
+        
         GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.gridX, gridPropertyDetails.gridY, gridPropertyDetails);
+        
+        //如果庄稼有收获动画，播放完动画之后再删除Crop GameObject
+        if (cropDetails.isHarvestedAnimation && animator != null)
+        {
+            StartCoroutine(ProcessHarvestActionAfterAnimation(cropDetails,gridPropertyDetails ,animator));
+        }
+        else
+        {
+            HarvestAction(cropDetails, gridPropertyDetails);
+        }
+    }
+
+    private IEnumerator ProcessHarvestActionAfterAnimation(CropDetails cropDetails,
+        GridPropertyDetails gridPropertyDetails, Animator animator)
+    {
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Harvested"))
+        {
+            yield return null;
+        }
         
         HarvestAction(cropDetails, gridPropertyDetails);
     }
-
+    
     private void HarvestAction(CropDetails cropDetails, GridPropertyDetails gridPropertyDetails)
     {
         SpawnHarvestedItems(cropDetails);

@@ -387,40 +387,43 @@ public class GridPropertiesManager : SingletonMonobehaviour<GridPropertiesManage
         if (gridPropertyDetails.seedItemCode > -1)
         {
             // 获取作物详情
-            CropDetails cropDetailses = so_CropDetailsList.GetCropDetails(gridPropertyDetails.seedItemCode);
-    
-            // 要使用的预制体
-            GameObject cropPrefab;
-    
-            // 在网格位置实例化作物预制体
-            int growthStages = cropDetailses.growthDays.Length;
-            
-            int currentGrowthStage = 0;
-            int daysCounter = cropDetailses.totalGrowthDays;
-    
-            for (int i = growthStages - 1; i >= 0; i--)
+            CropDetails cropDetails = so_CropDetailsList.GetCropDetails(gridPropertyDetails.seedItemCode);
+
+            if (cropDetails != null)
             {
-                if (gridPropertyDetails.growthDays >= daysCounter)
+                // 要使用的预制体
+                GameObject cropPrefab;
+    
+                // 在网格位置实例化作物预制体
+                int growthStages = cropDetails.growthDays.Length;
+            
+                int currentGrowthStage = 0;
+                int daysCounter = cropDetails.totalGrowthDays;
+    
+                for (int i = growthStages - 1; i >= 0; i--)
                 {
-                    currentGrowthStage = i;
-                    break;
+                    if (gridPropertyDetails.growthDays >= daysCounter)
+                    {
+                        currentGrowthStage = i;
+                        break;
+                    }
+                    daysCounter = daysCounter - cropDetails.growthDays[i];
                 }
-                daysCounter = daysCounter - cropDetailses.growthDays[i];
+
+                cropPrefab = cropDetails.growthPrefab[currentGrowthStage];
+            
+                Sprite growthSprite = cropDetails.growthSprite[currentGrowthStage];
+
+                Vector3 worldPosition = groundDecoration2.CellToWorld(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY, 0));
+            
+                worldPosition = new Vector3(worldPosition.x + Settings.gridCellSize / 2, worldPosition.y, worldPosition.z);
+
+                GameObject cropInstance = Instantiate(cropPrefab, worldPosition, Quaternion.identity);
+            
+                cropInstance.GetComponentInChildren<SpriteRenderer>().sprite = growthSprite;
+                cropInstance.transform.SetParent(cropParentTransform);
+                cropInstance.GetComponent<Crop>().cropGridPosition = new Vector2Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY);
             }
-
-            cropPrefab = cropDetailses.growthPrefab[currentGrowthStage];
-            
-            Sprite growthSprite = cropDetailses.growthSprite[currentGrowthStage];
-
-            Vector3 worldPosition = groundDecoration2.CellToWorld(new Vector3Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY, 0));
-            
-            worldPosition = new Vector3(worldPosition.x + Settings.gridCellSize / 2, worldPosition.y, worldPosition.z);
-
-            GameObject cropInstance = Instantiate(cropPrefab, worldPosition, Quaternion.identity);
-            
-            cropInstance.GetComponentInChildren<SpriteRenderer>().sprite = growthSprite;
-            cropInstance.transform.SetParent(cropParentTransform);
-            cropInstance.GetComponent<Crop>().cropGridPosition = new Vector2Int(gridPropertyDetails.gridX, gridPropertyDetails.gridY);
         }
     }
     

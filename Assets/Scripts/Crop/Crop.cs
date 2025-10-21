@@ -48,8 +48,6 @@ public class Crop : MonoBehaviour
             }
         }
         
-        
-        
         //获取庄稼需要的收割次数
         int requiredHarvestActions = cropDetails.RequiredHarvestActionsForTool(equippedItemDetails.itemCode);
         if (requiredHarvestActions == -1)

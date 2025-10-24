@@ -269,6 +269,7 @@ public class GridCursor : MonoBehaviour
                 }
             
             case ItemType.Collecting_tool:
+            case ItemType.Chopping_tool:
                 //判断crop是否成熟，可以被收获 
                 
                 //判断grid是否被播种

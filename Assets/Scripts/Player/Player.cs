@@ -335,6 +335,14 @@ public class Player : SingletonMonobehaviour<Player>
                     WaterGroundAtCurosr(gridPropertyDetails, playerDirection);
                 }
                 break;
+            
+            case ItemType.Chopping_tool:
+                if (gridCursor.CursorPositionIsValid)
+                {
+                    ChopInPlayerDirection(gridPropertyDetails,itemDetails, playerDirection);
+                }
+                break;
+            
             case ItemType.Reaping_tool:
                 if (cursor.CursorPositionIsValid)
                 {
@@ -342,6 +350,7 @@ public class Player : SingletonMonobehaviour<Player>
                     ReapInPlayerDirectionAtCursor(itemDetails, playerDirection);
                 }
                 break;
+            
             case ItemType.Collecting_tool:
                 if (gridCursor.CursorPositionIsValid)
                 {
@@ -402,6 +411,34 @@ public class Player : SingletonMonobehaviour<Player>
         GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.gridX, gridPropertyDetails.gridY, gridPropertyDetails);
 
         GridPropertiesManager.Instance.DisplayWateredGround(gridPropertyDetails);
+        
+        yield return afterLiftToolAnimationPause;
+        
+        playerToolUseDisabled = false;
+        PlayerInputIsDisabled = false;
+    }
+
+    private void ChopInPlayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails,
+        Vector3Int playerDirection)
+    {
+        StartCoroutine(ChopInPlayerDirectionRoutine(gridPropertyDetails, itemDetails, playerDirection));
+    }
+
+    private IEnumerator ChopInPlayerDirectionRoutine(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails,
+        Vector3Int playerDirection)
+    {
+        PlayerInputIsDisabled = true;
+        playerToolUseDisabled = true;
+        
+        //设置动画参数来重构玩家动画机
+        toolCharacterAttribute.partVariantType = PartVariantType.axe;
+        characterAttributeCustomisationList.Clear();
+        characterAttributeCustomisationList.Add(toolCharacterAttribute);
+        animationOverrides.ApplyCharacterCustomisationParamters(characterAttributeCustomisationList);
+
+        ProcessCropWithEquippedItemInPlayerDirection(gridPropertyDetails, itemDetails, playerDirection);
+
+        yield return useToolAnimationPause;
         
         yield return afterLiftToolAnimationPause;
         
